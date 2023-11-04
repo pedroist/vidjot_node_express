@@ -27,3 +27,17 @@ or
 ```sh
 node app
 ```
+
+### Start server with nodemon
+
+```sh
+nodemon
+```
+
+### Install handlebars
+
+Allows to render templates and pass variables to it
+
+```sh
+npm install express-handlebars--save
+```
