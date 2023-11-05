@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 // About Route
 app.get('/about', (req, res) => {
-  res.send('ABOUT')
+  res.render('about')
 })
 
 app.listen(port, () => {
