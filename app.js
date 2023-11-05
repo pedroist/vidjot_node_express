@@ -12,7 +12,10 @@ const port = 5000
 
 // Index Route
 app.get('/', (req, res) => {
-  res.render('index')
+  const title = 'Welcome to Index Page'
+  res.render('index', {
+    title: title,
+  })
 })
 
 // About Route
