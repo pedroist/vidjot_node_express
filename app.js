@@ -1,7 +1,14 @@
 import express from 'express'
 import { engine } from 'express-handlebars'
+import mongoose from 'mongoose'
 
 const app = express()
+
+// Connect to mongoose
+mongoose
+  .connect('mongodb://localhost/vidjot-dev')
+  .then(() => console.log('MongoDB Connected...'))
+  .catch((err) => console.log(err))
 
 // Handlebars Middleware
 app.engine('handlebars', engine())
