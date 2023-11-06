@@ -4,6 +4,10 @@ import mongoose from 'mongoose'
 
 const app = express()
 
+// Load Idea Model
+import './models/Idea.js'
+const Idea = mongoose.model('ideas')
+
 // Connect to mongoose
 mongoose
   .connect('mongodb://localhost/vidjot-dev')
