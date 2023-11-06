@@ -36,8 +36,18 @@ nodemon
 
 ### Install handlebars
 
-Allows to render templates and pass variables to it
+Allows to render templates and pass variables to it.
 
 ```sh
 npm install express-handlebars--save
+```
+
+### Bootstrap
+
+Bootstrap installed by using the cdn scripts on the main.handlebars file.
+
+### Install Mongoose
+
+```sh
+npm install --save mongoose
 ```
