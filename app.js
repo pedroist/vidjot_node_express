@@ -1,6 +1,7 @@
 import express from 'express'
 import { engine } from 'express-handlebars'
 import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
 
 const app = express()
 
@@ -18,6 +19,10 @@ mongoose
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
 app.set('views', './views')
+
+// Body parser middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 const port = 5000
 
@@ -37,6 +42,28 @@ app.get('/about', (req, res) => {
 // Add Idea Form
 app.get('/add', (req, res) => {
   res.render('ideas/add')
+})
+
+// Process Form
+app.post('/ideas', (req, res) => {
+  let errors = []
+
+  if (!req.body.title) {
+    errors.push({ text: 'Please add a title' })
+  }
+  if (!req.body.details) {
+    errors.push({ text: 'Please add some details' })
+  }
+
+  if (errors.length > 0) {
+    res.render('ideas/add', {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details,
+    })
+  } else {
+    res.send('Passed')
+  }
 })
 
 app.listen(port, () => {
