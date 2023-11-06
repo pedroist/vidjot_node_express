@@ -51,3 +51,11 @@ Bootstrap installed by using the cdn scripts on the main.handlebars file.
 ```sh
 npm install --save mongoose
 ```
+
+### Install Mongoose
+
+Allow us to access req.body.
+
+```sh
+npm install body-parser
+```
