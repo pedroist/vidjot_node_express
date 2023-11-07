@@ -2,6 +2,7 @@ import express from 'express'
 import { engine } from 'express-handlebars'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
+import methodOverride from 'method-override'
 
 const app = express()
 
@@ -23,6 +24,9 @@ app.set('views', './views')
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+// Method-override middeware using query value
+app.use(methodOverride('_method'))
 
 const port = 5000
 
@@ -95,6 +99,21 @@ app.post('/ideas', (req, res) => {
       res.redirect('/ideas')
     })
   }
+})
+
+// Edit Form Process
+app.put('/ideas/:id', (req, res) => {
+  Idea.findOne({
+    _id: req.params.id,
+  }).then((idea) => {
+    // new values
+    idea.title = req.body.title
+    idea.details = req.body.details
+
+    idea.save().then((idea) => {
+      res.redirect('/ideas')
+    })
+  })
 })
 
 app.listen(port, () => {
