@@ -39,6 +39,18 @@ app.get('/about', (req, res) => {
   res.render('about')
 })
 
+// Idea Index Page
+app.get('/ideas', (req, res) => {
+  Idea.find({})
+    .lean() // converts into json from mongoose objects. Without this it gives errors
+    .sort({ date: 'desc' })
+    .then((ideas) => {
+      res.render('ideas/index', {
+        ideas: ideas,
+      })
+    })
+})
+
 // Add Idea Form
 app.get('/add', (req, res) => {
   res.render('ideas/add')

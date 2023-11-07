@@ -16,10 +16,10 @@ const IdeaSchema = new Schema({
   //   type: String,
   //   required: true,
   // },
-  // date: {
-  //   type: Date,
-  //   default: Date.now,
-  // },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 mongoose.model('ideas', IdeaSchema)
