@@ -113,3 +113,7 @@ db.ideas.deleteMany({title: 'title1'}) # Deletes all documents with title1
 
 db.ideas.deleteMany({}) # Deletes all documents in ideas Collection
 ```
+
+### Package method-override
+
+Used for the PUT requests
