@@ -118,6 +118,7 @@ app.post('/ideas', (req, res) => {
       details: req.body.details,
     }
     new Idea(newUser).save().then((idea) => {
+      req.flash('success_msg', 'Video idea added')
       res.redirect('/ideas')
     })
   }
@@ -133,6 +134,7 @@ app.put('/ideas/:id', (req, res) => {
     idea.details = req.body.details
 
     idea.save().then((idea) => {
+      req.flash('success_msg', 'Video idea updated')
       res.redirect('/ideas')
     })
   })
