@@ -8,9 +8,8 @@ import flash from 'connect-flash'
 
 const app = express()
 
-// Load Idea Model
-import './models/Idea.js'
-const Idea = mongoose.model('ideas')
+// Load routes
+import ideasRouter from './routes/ideas.js'
 
 // Connect to mongoose
 mongoose
@@ -65,88 +64,18 @@ app.get('/about', (req, res) => {
   res.render('about')
 })
 
-// Idea Index Page
-app.get('/ideas', (req, res) => {
-  Idea.find({})
-    .lean() // converts into json from mongoose objects. Without this it gives errors
-    .sort({ date: 'desc' })
-    .then((ideas) => {
-      res.render('ideas/index', {
-        ideas: ideas,
-      })
-    })
+// User Login Route
+app.get('/users/login', (req, res) => {
+  res.send('Login')
 })
 
-// Add Idea Form
-app.get('/ideas/add', (req, res) => {
-  res.render('ideas/add')
+// User Register Route
+app.get('/users/register', (req, res) => {
+  res.send('Register')
 })
 
-// Edit Idea Form
-app.get('/ideas/edit/:id', (req, res) => {
-  Idea.findOne({
-    _id: req.params.id,
-  })
-    .lean()
-    .then((idea) => {
-      res.render('ideas/edit', {
-        idea: idea,
-      })
-    })
-})
-
-// Process Form
-app.post('/ideas', (req, res) => {
-  let errors = []
-
-  if (!req.body.title) {
-    errors.push({ text: 'Please add a title' })
-  }
-  if (!req.body.details) {
-    errors.push({ text: 'Please add some details' })
-  }
-
-  if (errors.length > 0) {
-    res.render('ideas/add', {
-      errors: errors,
-      title: req.body.title,
-      details: req.body.details,
-    })
-  } else {
-    const newUser = {
-      title: req.body.title,
-      details: req.body.details,
-    }
-    new Idea(newUser).save().then((idea) => {
-      req.flash('success_msg', 'Video idea added')
-      res.redirect('/ideas')
-    })
-  }
-})
-
-// Edit Form Process
-app.put('/ideas/:id', (req, res) => {
-  Idea.findOne({
-    _id: req.params.id,
-  }).then((idea) => {
-    // new values
-    idea.title = req.body.title
-    idea.details = req.body.details
-
-    idea.save().then((idea) => {
-      req.flash('success_msg', 'Video idea updated')
-      res.redirect('/ideas')
-    })
-  })
-})
-
-// Delete Idea
-app.delete('/ideas/:id', (req, res) => {
-  Idea.findByIdAndDelete(req.params.id).then((idea) => {
-    req.flash('success_msg', 'Video idea removed')
-    res.redirect('/ideas')
-  })
-})
+// Use routes
+app.use('/ideas', ideasRouter)
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
