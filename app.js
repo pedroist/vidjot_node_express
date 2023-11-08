@@ -3,6 +3,8 @@ import { engine } from 'express-handlebars'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import methodOverride from 'method-override'
+import session from 'express-session'
+import flash from 'connect-flash'
 
 const app = express()
 
@@ -25,8 +27,28 @@ app.set('views', './views')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-// Method-override middeware using query value
+// Method-override middleware using query value
 app.use(methodOverride('_method'))
+
+// Express-session middleware
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+  })
+)
+// Flash middleware
+app.use(flash())
+
+// Global variables
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
+  //res.locals.user = req.user || null;
+  next()
+})
 
 const port = 5000
 
@@ -119,6 +141,7 @@ app.put('/ideas/:id', (req, res) => {
 // Delete Idea
 app.delete('/ideas/:id', (req, res) => {
   Idea.findByIdAndDelete(req.params.id).then((idea) => {
+    req.flash('success_msg', 'Video idea removed')
     res.redirect('/ideas')
   })
 })
