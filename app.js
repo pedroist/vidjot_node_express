@@ -116,6 +116,13 @@ app.put('/ideas/:id', (req, res) => {
   })
 })
 
+// Delete Idea
+app.delete('/ideas/:id', (req, res) => {
+  Idea.findByIdAndDelete(req.params.id).then((idea) => {
+    res.redirect('/ideas')
+  })
+})
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
 })
