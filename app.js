@@ -10,6 +10,7 @@ const app = express()
 
 // Load routes
 import ideasRouter from './routes/ideas.js'
+import usersRouter from './routes/users.js'
 
 // Connect to mongoose
 mongoose
@@ -64,18 +65,9 @@ app.get('/about', (req, res) => {
   res.render('about')
 })
 
-// User Login Route
-app.get('/users/login', (req, res) => {
-  res.send('Login')
-})
-
-// User Register Route
-app.get('/users/register', (req, res) => {
-  res.send('Register')
-})
-
 // Use routes
 app.use('/ideas', ideasRouter)
+app.use('/users', usersRouter)
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)

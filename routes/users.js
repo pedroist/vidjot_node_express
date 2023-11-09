@@ -1,5 +1,16 @@
 import express from 'express'
+import mongoose from 'mongoose'
 
-const router = express.Router()
+const usersRouter = express.Router()
 
-module.exports = router
+// User Login Route
+usersRouter.get('/login', (req, res) => {
+  res.render('users/login')
+})
+
+// User Register Route
+usersRouter.get('/register', (req, res) => {
+  res.send('Register')
+})
+
+export default usersRouter
