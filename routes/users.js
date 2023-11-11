@@ -10,7 +10,7 @@ usersRouter.get('/login', (req, res) => {
 
 // User Register Route
 usersRouter.get('/register', (req, res) => {
-  res.send('Register')
+  res.render('users/register')
 })
 
 export default usersRouter
