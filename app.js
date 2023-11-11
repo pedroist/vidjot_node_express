@@ -5,6 +5,7 @@ import bodyParser from 'body-parser'
 import methodOverride from 'method-override'
 import session from 'express-session'
 import flash from 'connect-flash'
+import path from 'path'
 
 const app = express()
 
@@ -26,6 +27,16 @@ app.set('views', './views')
 // Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+// Static folder
+// app.use(express.static(path.join(__dirname, 'public')))
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Method-override middleware using query value
 app.use(methodOverride('_method'))
