@@ -117,3 +117,7 @@ db.ideas.deleteMany({}) # Deletes all documents in ideas Collection
 ### Package method-override
 
 Used for the PUT requests
+
+### Packages passport and passport-local
+
+Passport is the middleware used for authentication and the strategy used is the local strategy.
