@@ -7,12 +7,17 @@ import session from 'express-session'
 import flash from 'connect-flash'
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
+import passport from 'passport'
 
 const app = express()
 
 // Load routes
 import ideasRouter from './routes/ideas.js'
 import usersRouter from './routes/users.js'
+
+// Passport Config
+import passportConfig from './config/passport.js'
+passportConfig(passport)
 
 // Connect to mongoose
 mongoose
@@ -45,6 +50,11 @@ app.use(
     saveUninitialized: true,
   })
 )
+
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
 // Flash middleware
 app.use(flash())
 

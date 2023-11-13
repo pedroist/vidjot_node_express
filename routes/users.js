@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
-//import passport from 'passport'
+import passport from 'passport'
 
 const usersRouter = express.Router()
 
@@ -12,6 +12,15 @@ const User = mongoose.model('users')
 // User Login Route
 usersRouter.get('/login', (req, res) => {
   res.render('users/login')
+})
+
+// Login Form Post
+usersRouter.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/ideas',
+    failureRedirect: '/users/login',
+    failureFlash: true,
+  })(req, res, next)
 })
 
 // User Register Route
