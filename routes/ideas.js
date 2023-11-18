@@ -10,7 +10,8 @@ const Idea = mongoose.model('ideas')
 
 // Idea Index Page
 ideasRouter.get('/', ensureAuthenticated, (req, res) => {
-  Idea.find({})
+  console.log(req.user)
+  Idea.find({ user: req.user.id })
     .lean() // converts into json from mongoose objects. Without this it gives errors
     .sort({ date: 'desc' })
     .then((ideas) => {
@@ -59,6 +60,7 @@ ideasRouter.post('/', ensureAuthenticated, (req, res) => {
     const newUser = {
       title: req.body.title,
       details: req.body.details,
+      user: req.user.id,
     }
     new Idea(newUser).save().then((idea) => {
       req.flash('success_msg', 'Video idea added')
