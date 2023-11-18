@@ -1,5 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import { ensureAuthenticated } from '../helpers/auth.js'
 
 const ideasRouter = express.Router()
 
@@ -8,7 +9,7 @@ import '../models/Idea.js'
 const Idea = mongoose.model('ideas')
 
 // Idea Index Page
-ideasRouter.get('/', (req, res) => {
+ideasRouter.get('/', ensureAuthenticated, (req, res) => {
   Idea.find({})
     .lean() // converts into json from mongoose objects. Without this it gives errors
     .sort({ date: 'desc' })
@@ -20,12 +21,12 @@ ideasRouter.get('/', (req, res) => {
 })
 
 // Add Idea Form
-ideasRouter.get('/add', (req, res) => {
+ideasRouter.get('/add', ensureAuthenticated, (req, res) => {
   res.render('ideas/add')
 })
 
 // Edit Idea Form
-ideasRouter.get('/edit/:id', (req, res) => {
+ideasRouter.get('/edit/:id', ensureAuthenticated, (req, res) => {
   Idea.findOne({
     _id: req.params.id,
   })
@@ -38,7 +39,7 @@ ideasRouter.get('/edit/:id', (req, res) => {
 })
 
 // Process Form
-ideasRouter.post('/', (req, res) => {
+ideasRouter.post('/', ensureAuthenticated, (req, res) => {
   let errors = []
 
   if (!req.body.title) {
@@ -67,7 +68,7 @@ ideasRouter.post('/', (req, res) => {
 })
 
 // Edit Form Process
-ideasRouter.put('/:id', (req, res) => {
+ideasRouter.put('/:id', ensureAuthenticated, (req, res) => {
   Idea.findOne({
     _id: req.params.id,
   }).then((idea) => {
@@ -83,7 +84,7 @@ ideasRouter.put('/:id', (req, res) => {
 })
 
 // Delete Idea
-ideasRouter.delete('/:id', (req, res) => {
+ideasRouter.delete('/:id', ensureAuthenticated, (req, res) => {
   Idea.findByIdAndDelete(req.params.id).then((idea) => {
     req.flash('success_msg', 'Video idea removed')
     res.redirect('/ideas')
