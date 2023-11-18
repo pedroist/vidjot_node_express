@@ -86,4 +86,15 @@ usersRouter.post('/register', (req, res) => {
   }
 })
 
+// Logout user
+usersRouter.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err)
+    }
+    req.flash('success_msg', 'You are logged out')
+    res.redirect('/users/login')
+  })
+})
+
 export default usersRouter
