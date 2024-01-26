@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Application, Request, Response, NextFunction } from 'express'
 import { engine } from 'express-handlebars'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
@@ -9,8 +9,6 @@ import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
 import passport from 'passport'
 
-const app = express()
-
 // Load routes
 import ideasRouter from './routes/ideas.js'
 import usersRouter from './routes/users.js'
@@ -19,11 +17,16 @@ import usersRouter from './routes/users.js'
 import passportConfig from './config/passport.js'
 passportConfig(passport)
 
+const app: Application = express()
+
 // Connect to mongoose
 mongoose
-  .connect('mongodb://localhost/vidjot-dev')
+  .connect('mongodb://localhost/vidjot-dev', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log('MongoDB Connected...'))
-  .catch((err) => console.log(err))
+  .catch((err: any) => console.error(err))
 
 // Handlebars Middleware
 app.engine('handlebars', engine())
@@ -59,7 +62,7 @@ app.use(passport.session())
 app.use(flash())
 
 // Global variables
-app.use(function (req, res, next) {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
   res.locals.error = req.flash('error')
@@ -67,18 +70,18 @@ app.use(function (req, res, next) {
   next()
 })
 
-const port = 5000
+const port: number = 5000
 
 // Index Route
-app.get('/', (req, res) => {
-  const title = 'Welcome!'
+app.get('/', (req: Request, res: Response) => {
+  const title: string = 'Welcome!'
   res.render('index', {
     title: title,
   })
 })
 
 // About Route
-app.get('/about', (req, res) => {
+app.get('/about', (req: Request, res: Response) => {
   res.render('about')
 })
 
