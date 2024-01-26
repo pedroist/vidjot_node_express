@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import passport from 'passport'
@@ -10,29 +10,32 @@ import '../models/User.js'
 const User = mongoose.model('users')
 
 // User Login Route
-usersRouter.get('/login', (req, res) => {
+usersRouter.get('/login', (req: Request, res: Response) => {
   res.render('users/login')
 })
 
 // Login Form Post
-usersRouter.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/ideas',
-    failureRedirect: '/users/login',
-    failureFlash: true,
-  })(req, res, next)
-})
+usersRouter.post(
+  '/login',
+  (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate('local', {
+      successRedirect: '/ideas',
+      failureRedirect: '/users/login',
+      failureFlash: true,
+    })(req, res, next)
+  }
+)
 
 // User Register Route
-usersRouter.get('/register', (req, res) => {
+usersRouter.get('/register', (req: Request, res: Response) => {
   res.render('users/register')
 })
 
 // Register Form POST
-usersRouter.post('/register', (req, res) => {
-  let errors = []
+usersRouter.post('/register', (req: Request, res: Response) => {
+  let errors: { text: string }[] = []
 
-  if (req.body.password != req.body.password2) {
+  if (req.body.password !== req.body.password2) {
     errors.push({ text: 'Passwords do not match' })
   }
 
@@ -50,7 +53,7 @@ usersRouter.post('/register', (req, res) => {
     })
   } else {
     // Check if user already exists
-    User.findOne({ email: req.body.email }).then((user) => {
+    User.findOne({ email: req.body.email }).then((user: any) => {
       if (user) {
         req.flash('error_msg', 'Email already registered')
         res.redirect('/users/register')
@@ -76,7 +79,7 @@ usersRouter.post('/register', (req, res) => {
                 res.redirect('/users/login')
               })
               .catch((err) => {
-                console.log(err)
+                console.error(err)
                 return
               })
           })
@@ -87,14 +90,17 @@ usersRouter.post('/register', (req, res) => {
 })
 
 // Logout user
-usersRouter.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err)
-    }
-    req.flash('success_msg', 'You are logged out')
-    res.redirect('/users/login')
-  })
-})
+usersRouter.get(
+  '/logout',
+  (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+      if (err) {
+        return next(err)
+      }
+      req.flash('success_msg', 'You are logged out')
+      res.redirect('/users/login')
+    })
+  }
+)
 
 export default usersRouter
