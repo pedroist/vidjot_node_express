@@ -74,6 +74,12 @@ ideasRouter.put('/:id', ensureAuthenticated, (req, res) => {
   Idea.findOne({
     _id: req.params.id,
   }).then((idea) => {
+    //Protect other users to use url with id of idea from other user to edit his idea
+    if (req.params.id !== req.user.id) {
+      req.flash('error_msg', 'Not Authorized')
+      req.redirect('/users/login')
+    }
+
     // new values
     idea.title = req.body.title
     idea.details = req.body.details
